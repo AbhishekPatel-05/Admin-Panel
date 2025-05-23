@@ -1,3 +1,4 @@
+(https://admin-panel-one-liart.vercel.app/)
 # AI Copilot Admin Panel
 
 A React-based administrative panel for customer support with integrated chat inbox and AI-powered assistance.
