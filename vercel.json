@@ -1,0 +1,7 @@
+{
+  "functions": {
+    "api/ollama.js": {
+      "maxDuration": 30
+    }
+  }
+}
