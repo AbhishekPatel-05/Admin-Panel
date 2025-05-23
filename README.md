@@ -1,70 +1,81 @@
-# Getting Started with Create React App
+# AI Copilot Admin Panel
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A React-based administrative panel for customer support with integrated chat inbox and AI-powered assistance.
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+- Responsive three-column layout (inbox, chat, AI copilot)
+- Chat interface with message history and composer
+- AI copilot integration using local Ollama instance
+- Message formatting options (bold, italic, underline, code)
+- Call and video call simulation panels
+- Conversation management with unread counts
 
-### `npm start`
+## Technologies
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- React 18+
+- JavaScript ES6+
+- CSS3
+- Node.js & Express (proxy server)
+- Ollama (local LLM runtime)
+- Font Awesome (icons)
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Setup
 
-### `npm test`
+### Prerequisites
+- Node.js (v16+)
+- npm or yarn
+- Ollama
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Installation
 
-### `npm run build`
+1. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+2. Set up Ollama:
+   ```bash
+   ollama serve
+   ollama pull llama2
+   ```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+3. Create proxy server (`server.js`):
+   ```javascript
+   const express = require('express');
+   const cors = require('cors');
+   
+   const app = express();
+   app.use(cors());
+   app.use(express.json());
+   
+   app.post('/api/ollama', async (req, res) => {
+     const response = await fetch('http://localhost:11434/api/generate', {
+       method: 'POST',
+       headers: { 'Content-Type': 'application/json' },
+       body: JSON.stringify(req.body)
+     });
+     const data = await response.text();
+     res.send(data);
+   });
+   
+   app.listen(5000);
+   ```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+4. Run the application:
+   ```bash
+   # Terminal 1
+   node server.js
+   
+   # Terminal 2  
+   npm start
+   ```
 
-### `npm run eject`
+5. Open `http://localhost:3000`
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## Notes
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- Extra actions (notes, summaries, file attachments) have placeholder functionality
+- Proxy server handles CORS issues between React app and Ollama
+- Application uses plain CSS without external UI frameworks
+- All ports and URLs can be configured as needed
